@@ -1,0 +1,21 @@
+---
+title: "Bike Data Project - ST558"
+author: "Lucy Eckert"
+date: "10/8/2020"
+output:
+  github_document:
+    toc: true
+    toc_depth: 4
+---
+
+```{r}
+library(tidyverse)
+library(readr)
+
+getwd()
+data.path <- "C:/Users/leckert/Documents/NCSU/ST558/Project_2"
+day <- read_csv(paste0(data.path,"/day.csv"))
+Monday <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
+```
+
+
