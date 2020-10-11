@@ -29,8 +29,7 @@ that would predict the daily total of bike rentals.
 ### Supporting Information
 
 ``` 
-+ For this project, I am using a number of packages in R. They include, Tidyverse, 
-Readr, Caret, GGplot2, tree   
++ For this project, I am using a number of packages in R. They include, Tidyverse, Readr, Caret, GGplot2,   
 ```
 
 ### Information about Variable Selection
@@ -83,6 +82,28 @@ as it does not contribute to the prediction.
   - *cnt*: THe variable I am building models to predict, it is the count
     of total rental bikes including both casual and registered
 
+<!-- end list -->
+
+    ## -- Attaching packages ------------------------------ tidyverse 1.3.0 --
+
+    ## v ggplot2 3.3.2     v purrr   0.3.4
+    ## v tibble  3.0.3     v dplyr   1.0.1
+    ## v tidyr   1.1.1     v stringr 1.4.0
+    ## v readr   1.3.1     v forcats 0.5.0
+
+    ## -- Conflicts --------------------------------- tidyverse_conflicts() --
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
+
+    ## Loading required package: lattice
+
+    ## 
+    ## Attaching package: 'caret'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     lift
+
 ## Work with Data
 
 Create relative path, pull in data, and create Monday dataset.
@@ -128,7 +149,7 @@ a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](Leckert_Proj2_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 #Rentals by Season
@@ -137,7 +158,7 @@ b + geom_bar(stat = "identity", aes(y=cnt, fill="Season"), colour="green") + lab
        labels = c("Winter", "Spring", "Summer", "Fall")) 
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Leckert_Proj2_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 #Rentals by Weather Type
@@ -146,7 +167,7 @@ c + geom_bar(stat = "identity", aes(y=cnt, fill="Weather"), colour="green") +
   labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") +   scale_fill_discrete(name = "Weather:") 
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Leckert_Proj2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 Create train and test data sets for Monday data. Clean data.
 
