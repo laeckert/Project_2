@@ -2,7 +2,7 @@ library(readr)
 library(tidyverse)
 library(caret)
 library(ggplot2)
-
+library(knitr)
 
 data.path <- "C:/Users/leckert/Documents/NCSU/ST558/Project_2"
 day <- read_csv(paste0(data.path,"/day.csv"))
@@ -45,6 +45,17 @@ b <- ggplot(Monday, aes(x=season, y=cnt, color=season)) +
   geom_bar(stat="identity", fill="white") +labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") + scale_fill_discrete(name = "Seasons:", labels = c("Winter", "Spring", "Summer", "Fall")) 
 b
 
+summary_data <- Monday %>% select(temp:windspeed)
+kable(apply(summary_data, 2, summary), caption = paste("Summary Stats for Continuous Variables"), 
+      digit = 2)
+
+dmy <- dummyVars(" ~ .", data = Monday.Train, fullRank = T)
+Monday.Train.trf <- data.frame(predict(dmy, newdata = Monday.Train)) %>% mutate(y = scale(cnt)) 
+Monday.Train.trf.pred <- Monday.Train.trf %>% select(-c(cnt)) 
+boxcoxt <- BoxCoxTrans(Monday.Train.trf$cnt)
+Monday.Train.trf.resp <- predict(boxcoxt, Monday.Train.trf$cnt)
+
+
 fitControl <- trainControl(method = "LOOCV")
 model <- train(y ~., data = Monday.Train.trf, method = "ctree",
                trControl = fitControl)
@@ -59,6 +70,23 @@ plot(treefit)
 text(treefit)
 summary(treefit)
 1-(deviance(treefit)/SSy)
+
+#try random forest
+rfFit <- randomForest(cnt ~ ., data = Monday.Train.trf, mtry = ncol(Monday.Train.trf)/23, 
+                      ntree = 200, importance = TRUE)
+rfPred <- predict(rfFit, newdata = dplyr::select(Monday.Test, -cnt))
+
+bagFit <- randomForest(price ~ ., data = diamondsTrain, mtry = ncol(diamondsTrain) - 1, 
+                       ntree = 200, importance = TRUE)
+bagPred <- predict(bagFit, newdata = dplyr::select(diamondsTest, -price))
+treeFit <- tree(price ~ ., data = diamondsTrain)
+pred <- predict(treeFit, newdata = dplyr::select(diamondsTest, -price))
+
+bagRMSE <- sqrt(mean((bagPred-diamondsTest$price)^2))
+treeRMSE <- sqrt(mean((pred-diamondsTest$price)^2))
+
+rfRMSE <- sqrt(mean((rfPred-diamondsTest$price)^2))
+c(rf = rfRMSE, bag = bagRMSE, tree = treeRMSE)
 
 
 #### Appendix
