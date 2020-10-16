@@ -14,6 +14,7 @@ Lucy Eckert
       - [Work with Data](#work-with-data)
           - [Build Models for Monday Train
             Data](#build-models-for-monday-train-data)
+          - [Discussion of Automation](#discussion-of-automation)
 
 # ST 558 Project \#2, Group B - Predicting Bike Rental Totals
 
@@ -115,6 +116,7 @@ day <- read_csv(paste0(data.path,"/day.csv"))
     ## )
 
 ``` r
+byday <- day %>% select(-c(casual,registered, instant, dteday))
 #Filter out Monday data, and remove unused variables
 Monday <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
 ```
@@ -181,7 +183,12 @@ Monday.Test <-  Monday[-trainIndex, ]
 
 ### Build Models for Monday Train Data
 
-Model 1: Non-Ensemble Tree
+**Model 1: Non-Ensemble Tree**
+
+While doing some research on model building, I discovered the concept of
+of using dummy variables as a way to create “switches” for some of the
+variables. It really helped me break down which were more useful for the
+model.
 
 ``` r
 Monday       <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
@@ -220,16 +227,34 @@ plot(model$finalModel)
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-Model 2: Boosted Tree ADD SELECTION DISCUSSION
+**Model 2: Boosted Tree**
+
+I selected this model after trying many combinations of the n.trees,
+shrinkage, and interaction depth. I selected it for the most favorable
+RMSE.
 
 ``` r
 set.seed(1)
-boostFit1 <- gbm(cnt ~., data = Monday.Train, distribution = "gaussian", n.trees = 100,
+boostFit8 <- gbm(cnt ~., data = Monday.Train, distribution = "gaussian", n.trees = 100,
                  shrinkage = .1, interaction.depth = 2)
-boostPred <- predict(boostFit1, newdata = dplyr::select(Monday.Test, -cnt), n.trees = 100)
+boostPred <- predict(boostFit8, newdata = dplyr::select(Monday.Test, -cnt), n.trees = 100)
 boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 #Print RMSE
 boostRMSE
 ```
 
-    ## [1] 807.3179
+    ## [1] 810.1742
+
+### Discussion of Automation
+
+``` r
+dayofweek <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+output_file <- paste0(dayofweek, "Analysis", ".md")
+
+params <- lapply(dayofweek, FUN = function(x){list(weekday = x)})
+
+reports <- tibble(output_file, params)
+
+apply(reports, MARGIN = 1, FUN = function(x){render(input = "Leckert_Proj2.Rmd", output_file = x[[1]], params = x[[2]])})
+```
