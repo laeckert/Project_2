@@ -1751,24 +1751,22 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF5b2Z3ZWVrIDwtIGMoXCJtb25kYXlcIiwgXCJ0dWVzZGF5XCIsIFwid2VkbmVzZGF5XCIsIFwidGh1cnNkYXlcIiwgXCJmcmlkYXlcIiwgXCJzYXR1cmRheVwiLCBcInN1bmRheVwiKVxuXG5vdXRwdXRfZmlsZSA8LSBwYXN0ZTAoZGF5b2Z3ZWVrLCBcIkFuYWx5c2lzXCIsIFwiLm1kXCIpXG5cbnBhcmFtcyA8LSBsYXBwbHkoZGF5b2Z3ZWVrLCBGVU4gPSBmdW5jdGlvbih4KXtsaXN0KGRheSA9IHgpfSlcblxucmVwb3J0cyA8LSB0aWJibGUob3V0cHV0X2ZpbGUsIHBhcmFtcylcblxuYXBwbHkocmVwb3J0cywgTUFSR0lOID0gMSwgRlVOID0gZnVuY3Rpb24oeCl7cmVuZGVyKGlucHV0ID0gXCJMZWNrZXJ0X1Byb2oyLlJtZFwiLCBcbm91dHB1dF9maWxlID0geFtbMV1dLCBwYXJhbXMgPSB4W1syXV0pfSlcblxuXG5gYGAifQ== -->
-<pre class="r"><code>dayofweek &lt;- c(&quot;monday&quot;, &quot;tuesday&quot;, &quot;wednesday&quot;, &quot;thursday&quot;, &quot;friday&quot;, &quot;saturday&quot;, &quot;sunday&quot;)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF5b2Z3ZWVrIDwtIGMoXCJNb25kYXlcIiwgXCJUdWVzZGF5XCIsIFwiV2VkbmVzZGF5XCIsIFwiVGh1cnNkYXlcIiwgXCJGcmlkYXlcIiwgXCJTYXR1cmRheVwiLCBcIlN1bmRheVwiKVxuXG5vdXRwdXRfZmlsZSA8LSBwYXN0ZTAoZGF5b2Z3ZWVrLCBcIkFuYWx5c2lzXCIsIFwiLm1kXCIpXG5cbnBhcmFtcyA8LSBsYXBwbHkoZGF5b2Z3ZWVrLCBGVU4gPSBmdW5jdGlvbih4KXtsaXN0KHdlZWtkYXkgPSB4KX0pXG5cbnJlcG9ydHMgPC0gdGliYmxlKG91dHB1dF9maWxlLCBwYXJhbXMpXG5cbmFwcGx5KHJlcG9ydHMsIE1BUkdJTiA9IDEsIEZVTiA9IGZ1bmN0aW9uKHgpe3JlbmRlcihpbnB1dCA9IFwiTGVja2VydF9Qcm9qMi5SbWRcIiwgb3V0cHV0X2ZpbGUgPSB4W1sxXV0sIHBhcmFtcyA9IHhbWzJdXSl9KVxuYGBgIn0= -->
+<pre class="r"><code>dayofweek &lt;- c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;, &quot;Sunday&quot;)
 
 output_file &lt;- paste0(dayofweek, &quot;Analysis&quot;, &quot;.md&quot;)
 
-params &lt;- lapply(dayofweek, FUN = function(x){list(day = x)})
+params &lt;- lapply(dayofweek, FUN = function(x){list(weekday = x)})
 
 reports &lt;- tibble(output_file, params)
 
-apply(reports, MARGIN = 1, FUN = function(x){render(input = &quot;Leckert_Proj2.Rmd&quot;, 
-output_file = x[[1]], params = x[[2]])})
-</code></pre>
+apply(reports, MARGIN = 1, FUN = function(x){render(input = &quot;Leckert_Proj2.Rmd&quot;, output_file = x[[1]], params = x[[2]])})</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJtZCBSZW5kZXIgZmlsZSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQpgYGB7cn0NCmRheW9md2VlayA8LSBjKCJtb25kYXkiLCAidHVlc2RheSIsICJ3ZWRuZXNkYXkiLCAidGh1cnNkYXkiLCAiZnJpZGF5IiwgInNhdHVyZGF5IiwgInN1bmRheSIpDQoNCm91dHB1dF9maWxlIDwtIHBhc3RlMChkYXlvZndlZWssICJBbmFseXNpcyIsICIubWQiKQ0KDQpwYXJhbXMgPC0gbGFwcGx5KGRheW9md2VlaywgRlVOID0gZnVuY3Rpb24oeCl7bGlzdChkYXkgPSB4KX0pDQoNCnJlcG9ydHMgPC0gdGliYmxlKG91dHB1dF9maWxlLCBwYXJhbXMpDQoNCmFwcGx5KHJlcG9ydHMsIE1BUkdJTiA9IDEsIEZVTiA9IGZ1bmN0aW9uKHgpe3JlbmRlcihpbnB1dCA9ICJMZWNrZXJ0X1Byb2oyLlJtZCIsIA0Kb3V0cHV0X2ZpbGUgPSB4W1sxXV0sIHBhcmFtcyA9IHhbWzJdXSl9KQ0KDQoNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlJtZCBSZW5kZXIgZmlsZSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQpgYGB7cn0NCmRheW9md2VlayA8LSBjKCJNb25kYXkiLCAiVHVlc2RheSIsICJXZWRuZXNkYXkiLCAiVGh1cnNkYXkiLCAiRnJpZGF5IiwgIlNhdHVyZGF5IiwgIlN1bmRheSIpDQoNCm91dHB1dF9maWxlIDwtIHBhc3RlMChkYXlvZndlZWssICJBbmFseXNpcyIsICIubWQiKQ0KDQpwYXJhbXMgPC0gbGFwcGx5KGRheW9md2VlaywgRlVOID0gZnVuY3Rpb24oeCl7bGlzdCh3ZWVrZGF5ID0geCl9KQ0KDQpyZXBvcnRzIDwtIHRpYmJsZShvdXRwdXRfZmlsZSwgcGFyYW1zKQ0KDQphcHBseShyZXBvcnRzLCBNQVJHSU4gPSAxLCBGVU4gPSBmdW5jdGlvbih4KXtyZW5kZXIoaW5wdXQgPSAiTGVja2VydF9Qcm9qMi5SbWQiLCBvdXRwdXRfZmlsZSA9IHhbWzFdXSwgcGFyYW1zID0geFtbMl1dKX0pDQpgYGANCg0K</div>
 
 
 

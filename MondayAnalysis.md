@@ -131,7 +131,7 @@ a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 #Rentals by Season
@@ -140,7 +140,7 @@ b + geom_bar(stat = "identity", aes(y=cnt, fill="Season"), colour="green") + lab
        labels = c("Winter", "Spring", "Summer", "Fall")) 
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 #Rentals by Weather Type
@@ -149,7 +149,7 @@ c + geom_bar(stat = "identity", aes(y=cnt, fill="Weather"), colour="green") +
   labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") +   scale_fill_discrete(name = "Weather:") 
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Review Summary Stats for Continuous Variables
 
@@ -218,7 +218,7 @@ print(model)
 plot(model$finalModel)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 Model 2: Boosted Tree ADD SELECTION DISCUSSION
 
@@ -232,4 +232,4 @@ boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 boostRMSE
 ```
 
-    ## [1] 807.3179
+    ## [1] 842.6124
