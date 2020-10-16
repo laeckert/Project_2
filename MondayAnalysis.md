@@ -243,7 +243,7 @@ boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 boostRMSE
 ```
 
-    ## [1] 830.1973
+    ## [1] 829.3845
 
 ### Code Automation
 

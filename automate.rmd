@@ -3,16 +3,15 @@ title: "Proj 2 Automation"
 author: "Lucy Eckert"
 date: "10/15/2020"
 output: html_document
-
     
 ---
 
-```{r}
+```{r setup}
 library(tidyverse)
 library(rmarkdown)
 ```
 
-```{r }
+```{r automation}
 dayofweek <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 output_file <- paste0(dayofweek, "Analysis", ".md")
