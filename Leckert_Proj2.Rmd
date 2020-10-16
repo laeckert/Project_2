@@ -145,8 +145,6 @@ boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 boostRMSE
 ```
 
-### Automate to Tuesday:Sunday Data
-```{r}
 
-```
+
 
