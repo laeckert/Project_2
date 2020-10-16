@@ -243,7 +243,7 @@ boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 boostRMSE
 ```
 
-    ## [1] 825.9704
+    ## [1] 818.8607
 
 ### Code Automation
 
@@ -262,3 +262,24 @@ reports <- tibble(output_file, params)
 
 apply(reports, MARGIN = 1, FUN = function(x){render(input = "Leckert_Proj2.Rmd", output_file = x[[1]], params = x[[2]])})
 ```
+
+The analysis for [Monday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/MondayAnalysis_files/figure-gfm/Monday.pdf)
+
+The analysis for [Tuesday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/TuesdayAnalysis_files/figure-gfm/Tuesday.pdf)
+
+The analysis for [Wednesday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/WednesdayAnalysis_files/figure-gfm/Wednesday.pdf)
+
+The analysis for [Thursday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/ThursdayAnalysis_files/figure-gfm/Thursday.pdf)
+
+The analysis for [Friday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/FridayAnalysis_files/figure-gfm/Friday.pdf)
+
+The analysis for [Saturday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/SaturdayAnalysis_files/figure-gfm/Saturday.pdf)
+
+The analysis for [Sunday can be found
+here.](https://github.com/laeckert/Project_2/blob/main/SundayAnalysis_files/figure-gfm/Sunday.pdf)

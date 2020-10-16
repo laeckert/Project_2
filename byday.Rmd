@@ -1,0 +1,100 @@
+---
+title: "Sunday"
+author: "Lucy Eckert"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(readr)
+library(caret)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(party)
+library(gbm)
+# rmarkdown::render("Leckert_Proj2.Rmd", output_file="README.md")
+```
+
+
+
+```{r}
+data.path <- "C:/Users/leckert/Documents/NCSU/ST558/Project_2"
+day <- read_csv(paste0(data.path,"/day.csv"))
+byday <- day %>% select(-c(casual,registered, instant, dteday))
+#Filter out Monday data, and remove unused variables
+ByDay <- day %>% filter(weekday==7) %>% select(-c(casual,registered, instant, dteday))
+```
+
+Review Data by Summaries and Plots
+```{r, , warning = FALSE}
+#Rentals by Temperature
+a <- ggplot(ByDay, aes(temp, cnt))
+a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature", 
+                                       x = "Normalized Temperature in Celcius", 
+                                       y = "Count of Bike Rentals")
+```
+
+```{r, , warning = FALSE}
+#Rentals by Season
+b <- ggplot(day, aes(x = season, y = cnt))
+b + geom_bar(stat = "identity", aes(y=cnt, fill="Season"), colour="green") + labs(title = "Bike Rental Count by Season", x = "Season", y = "Count of Bike Rentals") + scale_fill_discrete(name = "Seasons:", 
+       labels = c("Winter", "Spring", "Summer", "Fall")) 
+```
+
+```{r, warning = FALSE}
+#Rentals by Weather Type
+c <- ggplot(day, aes(x = weathersit, y = cnt))
+c + geom_bar(stat = "identity", aes(y=cnt, fill="Weather"), colour="green") + 
+  labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") +   scale_fill_discrete(name = "Weather:") 
+```
+
+Review Summary Stats for Continuous Variables
+```{r}
+summary_data <- ByDay %>% select(temp:windspeed)
+kable(apply(summary_data, 2, summary), caption = paste("Summary Stats for Continuous Variables"), 
+      digit = 2)
+```
+
+
+Create train and test data sets for Monday data. Clean data.
+```{r, , warning = FALSE}
+set.seed(1)
+trainIndex <- createDataPartition(ByDay$cnt, p = 0.7, list = FALSE)
+Train <- ByDay[trainIndex, ] 
+Test <-  ByDay[-trainIndex, ]
+```
+  
+### Build Models forTrain Data  
+
+**Model 1: Non-Ensemble Tree** 
+
+While doing some research on model building, I discovered the concept of of using dummy 
+variables as a way to create "switches" for some of the variables. It really helped me
+break down which were more useful for the model.
+```{r, warning = FALSE}
+ByDay      <- day %>% filter(weekday==7) %>% select(-c(casual,registered, instant, dteday))
+trainIndex   <- createDataPartition(ByDay$cnt, p = 0.7, list = FALSE)
+Train <- ByDay[trainIndex, ] %>% select(-c(workingday, weekday)) %>% 
+  mutate(mnth=as.factor(mnth), season=as.factor(season), weathersit = as.factor(weathersit))
+dmy          <- dummyVars(" ~ .", data = Train, fullRank = T)
+Train.trf <- data.frame(predict(dmy, newdata = Train)) %>% mutate(y = scale(cnt)) %>% select(-cnt)
+fitControl <- trainControl(method = "LOOCV")
+model      <- train(y ~., data = Train.trf, method = "ctree",
+                    trControl = fitControl)
+print(model)
+plot(model$finalModel)
+```
+
+**Model 2: Boosted Tree**
+
+I selected this model after trying many combinations of the n.trees, shrinkage, 
+and interaction depth. I selected it for the most favorable RMSE.
+```{r, warning = FALSE}
+set.seed(1)
+boostFit8 <- gbm(cnt ~., data = Train, distribution = "gaussian", n.trees = 100,
+                 shrinkage = .1, interaction.depth = 2)
+boostPred <- predict(boostFit8, newdata = dplyr::select(Test, -cnt), n.trees = 100)
+boostRMSE <- sqrt(mean((boostPred-Test$cnt)^2))
+#Print RMSE
+boostRMSE

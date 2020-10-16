@@ -804,7 +804,7 @@ Readr, Caret, GGplot2, tree, dplyr, knitr, party, gbm,
 <span id="cb15-5"><a href="#cb15-5"></a>boostRMSE &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">mean</span>((boostPred<span class="op">-</span>Monday.Test<span class="op">$</span>cnt)<span class="op">^</span><span class="dv">2</span>))</span>
 <span id="cb15-6"><a href="#cb15-6"></a><span class="co">#Print RMSE</span></span>
 <span id="cb15-7"><a href="#cb15-7"></a>boostRMSE</span></code></pre></div>
-<pre><code>## [1] 825.9704
+<pre><code>## [1] 818.8607
 </code></pre>
 <h3 id="code-automation">Code Automation</h3>
 <p>I’m running this code in another rmd to automate the other reports, but I wanted to include it here (with eval = FALSE) so that my project is documented in one place.</p>
@@ -817,6 +817,13 @@ Readr, Caret, GGplot2, tree, dplyr, knitr, party, gbm,
 <span id="cb17-7"><a href="#cb17-7"></a>reports &lt;-<span class="st"> </span><span class="kw">tibble</span>(output_file, params)</span>
 <span id="cb17-8"><a href="#cb17-8"></a></span>
 <span id="cb17-9"><a href="#cb17-9"></a><span class="kw">apply</span>(reports, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="dt">FUN =</span> <span class="cf">function</span>(x){<span class="kw">render</span>(<span class="dt">input =</span> <span class="st">&quot;Leckert_Proj2.Rmd&quot;</span>, <span class="dt">output_file =</span> x[[<span class="dv">1</span>]], <span class="dt">params =</span> x[[<span class="dv">2</span>]])})</span></code></pre></div>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/MondayAnalysis_files/figure-gfm/Monday.pdf">Monday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/TuesdayAnalysis_files/figure-gfm/Tuesday.pdf">Tuesday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/WednesdayAnalysis_files/figure-gfm/Wednesday.pdf">Wednesday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/ThursdayAnalysis_files/figure-gfm/Thursday.pdf">Thursday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/FridayAnalysis_files/figure-gfm/Friday.pdf">Friday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/SaturdayAnalysis_files/figure-gfm/Saturday.pdf">Saturday can be found here.</a></p>
+<p>The analysis for <a href="https://github.com/laeckert/Project_2/blob/main/SundayAnalysis_files/figure-gfm/Sunday.pdf">Sunday can be found here.</a></p>
 
 </body>
 </html>
