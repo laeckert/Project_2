@@ -6,6 +6,9 @@ output:
   github_document:
     toc: true
     toc_depth: 4
+params:
+          weekday: x[[2]]
+
 ---
 # ST 558 Project #2, Group B - Predicting Bike Rental Totals  
 
