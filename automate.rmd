@@ -3,6 +3,7 @@ title: "Proj 2 Automation"
 author: "Lucy Eckert"
 date: "10/15/2020"
 output: html_document
+
     
 ---
 

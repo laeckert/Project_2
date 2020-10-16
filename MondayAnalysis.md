@@ -3,8 +3,8 @@ Bike Data Project - ST558
 Lucy Eckert
 10/8/2020
 
-  - [ST 558 Project \#2, Group B - Predicting Bike Rental
-    Totals](#st-558-project-2-group-b---predicting-bike-rental-totals)
+  - [Creating a Model for Predicting Bike Sharing
+    Numbers](#creating-a-model-for-predicting-bike-sharing-numbers)
       - [Introduction and Supporting
         Information](#introduction-and-supporting-information)
           - [Introduction](#introduction)
@@ -14,8 +14,9 @@ Lucy Eckert
       - [Work with Data](#work-with-data)
           - [Build Models for Monday Train
             Data](#build-models-for-monday-train-data)
+          - [Code Automation](#code-automation)
 
-# ST 558 Project \#2, Group B - Predicting Bike Rental Totals
+# Creating a Model for Predicting Bike Sharing Numbers
 
 ## Introduction and Supporting Information
 
@@ -115,6 +116,7 @@ day <- read_csv(paste0(data.path,"/day.csv"))
     ## )
 
 ``` r
+byday <- day %>% select(-c(casual,registered, instant, dteday))
 #Filter out Monday data, and remove unused variables
 Monday <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
 ```
@@ -131,7 +133,7 @@ a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
-![](MondayAnalysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 #Rentals by Season
@@ -140,7 +142,7 @@ b + geom_bar(stat = "identity", aes(y=cnt, fill="Season"), colour="green") + lab
        labels = c("Winter", "Spring", "Summer", "Fall")) 
 ```
 
-![](MondayAnalysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 #Rentals by Weather Type
@@ -149,7 +151,7 @@ c + geom_bar(stat = "identity", aes(y=cnt, fill="Weather"), colour="green") +
   labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") +   scale_fill_discrete(name = "Weather:") 
 ```
 
-![](MondayAnalysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Review Summary Stats for Continuous Variables
 
@@ -181,7 +183,12 @@ Monday.Test <-  Monday[-trainIndex, ]
 
 ### Build Models for Monday Train Data
 
-Model 1: Non-Ensemble Tree
+**Model 1: Non-Ensemble Tree**
+
+While doing some research on model building, I discovered the concept of
+of using dummy variables as a way to create “switches” for some of the
+variables. It really helped me break down which were more useful for the
+model.
 
 ``` r
 Monday       <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
@@ -218,18 +225,40 @@ print(model)
 plot(model$finalModel)
 ```
 
-![](MondayAnalysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](MondayAnalysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-Model 2: Boosted Tree ADD SELECTION DISCUSSION
+**Model 2: Boosted Tree**
+
+I selected this model after trying many combinations of the n.trees,
+shrinkage, and interaction depth. I selected it for the most favorable
+RMSE.
 
 ``` r
 set.seed(1)
-boostFit1 <- gbm(cnt ~., data = Monday.Train, distribution = "gaussian", n.trees = 100,
+boostFit8 <- gbm(cnt ~., data = Monday.Train, distribution = "gaussian", n.trees = 100,
                  shrinkage = .1, interaction.depth = 2)
-boostPred <- predict(boostFit1, newdata = dplyr::select(Monday.Test, -cnt), n.trees = 100)
+boostPred <- predict(boostFit8, newdata = dplyr::select(Monday.Test, -cnt), n.trees = 100)
 boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 #Print RMSE
 boostRMSE
 ```
 
-    ## [1] 814.4072
+    ## [1] 830.1973
+
+### Code Automation
+
+I’m running this code in another rmd to automate the other reports, but
+I wanted to include it here (with eval = FALSE) so that my project is
+documented in one place.
+
+``` r
+dayofweek <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+output_file <- paste0(dayofweek, "Analysis", ".md")
+
+params <- lapply(dayofweek, FUN = function(x){list(weekday = x)})
+
+reports <- tibble(output_file, params)
+
+apply(reports, MARGIN = 1, FUN = function(x){render(input = "Leckert_Proj2.Rmd", output_file = x[[1]], params = x[[2]])})
+```

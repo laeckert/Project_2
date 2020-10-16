@@ -3,8 +3,8 @@ Bike Data Project - ST558
 Lucy Eckert
 10/8/2020
 
-  - [ST 558 Project \#2, Group B - Predicting Bike Rental
-    Totals](#st-558-project-2-group-b---predicting-bike-rental-totals)
+  - [Creating a Model for Predicting Bike Sharing
+    Numbers](#creating-a-model-for-predicting-bike-sharing-numbers)
       - [Introduction and Supporting
         Information](#introduction-and-supporting-information)
           - [Introduction](#introduction)
@@ -14,9 +14,9 @@ Lucy Eckert
       - [Work with Data](#work-with-data)
           - [Build Models for Monday Train
             Data](#build-models-for-monday-train-data)
-          - [Discussion of Automation](#discussion-of-automation)
+          - [Code Automation](#code-automation)
 
-# ST 558 Project \#2, Group B - Predicting Bike Rental Totals
+# Creating a Model for Predicting Bike Sharing Numbers
 
 ## Introduction and Supporting Information
 
@@ -243,9 +243,13 @@ boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
 boostRMSE
 ```
 
-    ## [1] 810.1742
+    ## [1] 820.6765
 
-### Discussion of Automation
+### Code Automation
+
+I’m running this code in another rmd to automate the other reports, but
+I wanted to include it here (with eval = FALSE) so that my project is
+documented in one place.
 
 ``` r
 dayofweek <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
