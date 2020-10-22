@@ -77,13 +77,13 @@ Create relative path, pull in data, and create Monday dataset.
 day <- read_csv(file = "day.csv")
 byday <- day %>% select(-c(casual,registered, instant, dteday))
 #Filter out Monday data, and remove unused variables
-Monday <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
+Tuesday <- day %>% filter(weekday==2) %>% select(-c(casual,registered, instant, dteday))
 ```
 
 Review Data by Summaries and Plots
 ```{r, , warning = FALSE}
 #Rentals by Temperature
-a <- ggplot(Monday, aes(temp, cnt))
+a <- ggplot(Tuesday, aes(temp, cnt))
 a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature", 
                                        x = "Normalized Temperature in Celcius", 
                                        y = "Count of Bike Rentals")
@@ -91,21 +91,21 @@ a + geom_jitter() +geom_smooth() +labs(title = "Bike Rental Count by Temperature
 
 ```{r, , warning = FALSE}
 #Rentals by Season
-b <- ggplot(Monday, aes(x = season, y = cnt))
+b <- ggplot(Tuesday, aes(x = season, y = cnt))
 b + geom_bar(stat = "identity", aes(y=cnt, fill="Season"), colour="green") + labs(title = "Bike Rental Count by Season", x = "Season", y = "Count of Bike Rentals") + scale_fill_discrete(name = "Seasons:", 
        labels = c("Winter", "Spring", "Summer", "Fall")) 
 ```
 
 ```{r, warning = FALSE}
 #Rentals by Weather Type
-c <- ggplot(Monday, aes(x = weathersit, y = cnt))
+c <- ggplot(Tuesday, aes(x = weathersit, y = cnt))
 c + geom_bar(stat = "identity", aes(y=cnt, fill="Weather"), colour="green") + 
   labs(title = "Bike Rental Count by Weather Type", x = "Weather Type", y = "Count of Bike Rentals") +   scale_fill_discrete(name = "Weather:") 
 ```
 
 Review Summary Stats for Continuous Variables
 ```{r}
-summary_data <- Monday %>% select(temp:windspeed)
+summary_data <- Tuesday %>% select(temp:windspeed)
 kable(apply(summary_data, 2, summary), caption = paste("Summary Stats for Continuous Variables"), 
       digit = 2)
 ```
@@ -114,9 +114,9 @@ kable(apply(summary_data, 2, summary), caption = paste("Summary Stats for Contin
 Create train and test data sets for Monday data. Clean data.
 ```{r, , warning = FALSE, error=TRUE}
 set.seed(1)
-trainIndex <- createDataPartition(Monday$cnt, p = 0.7, list = FALSE)
-Monday.Train <- Monday[trainIndex, ] 
-Monday.Test <-  Monday[-trainIndex, ]
+trainIndex <- createDataPartition(Tuesday$cnt, p = 0.7, list = FALSE)
+Tuesday.Train <- Tuesday[trainIndex, ] 
+Tuesday.Test <-  Tuesday[-trainIndex, ]
 ```
   
 ### Build Models for Monday Train Data  
@@ -127,14 +127,14 @@ While doing some research on model building, I discovered the concept of of usin
 variables as a way to create "switches" for some of the variables. It really helped me
 break down which were more useful for the model.
 ```{r, warning = FALSE, error=TRUE}
-Monday       <- day %>% filter(weekday==1) %>% select(-c(casual,registered, instant, dteday))
-trainIndex   <- createDataPartition(Monday$cnt, p = 0.7, list = FALSE)
-Monday.Train <- Monday[trainIndex, ] %>% select(-c(workingday, weekday)) %>% 
+Tuesday       <- day %>% filter(weekday==2) %>% select(-c(casual,registered, instant, dteday))
+trainIndex   <- createDataPartition(Tuesday$cnt, p = 0.7, list = FALSE)
+Tuesday.Train <- Tuesday[trainIndex, ] %>% select(-c(workingday, weekday)) %>% 
   mutate(mnth=as.factor(mnth), season=as.factor(season), weathersit = as.factor(weathersit))
-dmy          <- dummyVars(" ~ .", data = Monday.Train, fullRank = T)
-Monday.Train.trf <- data.frame(predict(dmy, newdata = Monday.Train)) %>% mutate(y = scale(cnt)) %>% select(-cnt)
+dmy          <- dummyVars(" ~ .", data = Tuesday.Train, fullRank = T)
+Tuesday.Train.trf <- data.frame(predict(dmy, newdata = Tuesday.Train)) %>% mutate(y = scale(cnt)) %>% select(-cnt)
 fitControl <- trainControl(method = "LOOCV")
-model      <- train(y ~., data = Monday.Train.trf, method = "ctree",
+model      <- train(y ~., data = Tuesday.Train.trf, method = "ctree",
                     trControl = fitControl)
 print(model)
 plot(model$finalModel)
@@ -146,10 +146,10 @@ I selected this model after trying many combinations of the n.trees, shrinkage,
 and interaction depth. I selected it for the most favorable RMSE.
 ```{r, warning = FALSE, error=TRUE}
 set.seed(1)
-boostFit8 <- gbm(cnt ~., data = Monday.Train, distribution = "gaussian", n.trees = 100,
+boostFit8 <- gbm(cnt ~., data = Tuesday.Train, distribution = "gaussian", n.trees = 100,
                  shrinkage = .1, interaction.depth = 2)
-boostPred <- predict(boostFit8, newdata = dplyr::select(Monday.Test, -cnt), n.trees = 100)
-boostRMSE <- sqrt(mean((boostPred-Monday.Test$cnt)^2))
+boostPred <- predict(boostFit8, newdata = dplyr::select(Tuesday.Test, -cnt), n.trees = 100)
+boostRMSE <- sqrt(mean((boostPred-Tuesday.Test$cnt)^2))
 #Print RMSE
 boostRMSE
 ```
@@ -157,9 +157,9 @@ boostRMSE
 **Model 3: Linear Regression**
 ```{r regmodel, echo=TRUE, warning=FALSE, error=TRUE}
 set.seed(1)
-regFit <- lm(cnt ~ temp + hum + windspeed, data=Monday.Train)
+regFit <- lm(cnt ~ temp + hum + windspeed, data=Tuesday.Train)
 
-regPred <- predict(regFit, newdata = dplyr::select(Monday.Test, -cnt))
+regPred <- predict(regFit, newdata = dplyr::select(Tuesday.Test, -cnt))
 ```
 
 
